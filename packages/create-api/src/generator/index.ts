@@ -123,8 +123,7 @@ export class ProjectGenerator {
 
       spinner.succeed('Setup inicial concluído')
     } catch (error) {
-      spinner.fail('Erro no setup inicial')
-      throw error
+      spinner.warn('Build falhou - você pode executar manualmente depois')
     }
   }
 
@@ -136,11 +135,18 @@ export class ProjectGenerator {
     console.log(colors.title('📋 Próximos passos:'))
     console.log()
     console.log(colors.info(`  cd ${this.config.projectName}`))
+    console.log(colors.info('  chmod +x scripts/dev-setup.sh'))
+    console.log(colors.info('  ./scripts/dev-setup.sh'))
+    console.log()
+    console.log(colors.subtitle('Ou manualmente:'))
+    console.log(colors.info('  cp .env.example .env'))
     
     if (this.config.includeDocker) {
       console.log(colors.info('  docker-compose up -d'))
     }
     
+    console.log(colors.info('  npm run db:migrate'))
+    console.log(colors.info('  npm run db:seed'))
     console.log(colors.info('  npm run dev'))
     console.log()
     
