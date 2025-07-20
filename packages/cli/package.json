@@ -1,0 +1,40 @@
+{
+  "name": "@labstart/docs-cli",
+  "version": "0.1.0",
+  "description": "CLI para documentação automática LabStart",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "labstart-docs": "./src/bin/cli.js"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@labstart/docs-core": "^0.1.0",
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/labstart/labstart-docs.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
