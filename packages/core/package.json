@@ -1,0 +1,44 @@
+{
+  "name": "@labstart/docs-core",
+  "version": "0.1.0",
+  "description": "Core library para documentação automática LabStart",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "fs-extra": "^11.0.0",
+    "glob": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/labstart/labstart-docs.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

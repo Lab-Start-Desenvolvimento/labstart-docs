@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build outputs  
+dist/
+build/
+*.tsbuildinfo
+
+# Coverage
+coverage/
+*.lcov
+
+# Environment
+.env*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Cache
+.npm
+.eslintcache
+.cache
+
+# Temp
+tmp/
+temp/
