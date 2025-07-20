@@ -51,7 +51,9 @@ export class ProjectGenerator {
         includeDocker: this.config.includeDocker,
         setupTests: this.config.setupTests,
         setupCI: this.config.setupCI,
-        year: new Date().getFullYear()
+        year: new Date().getFullYear(),
+        postgresql: this.config.database === 'postgresql',
+        mysql: this.config.database === 'mysql'
       }
 
       // Copiar template base
