@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      {{#if (eq database "postgresql")}}
+{{#postgresql}}
       postgres:
         image: postgres:15
         env:
@@ -26,8 +26,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      {{/if}}
-      {{#if (eq database "mysql")}}
+{{/postgresql}}
+{{#mysql}}
       mysql:
         image: mysql:8.0
         env:
@@ -40,7 +40,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-      {{/if}}
+{{/mysql}}
 
     steps:
       - name: Checkout code
@@ -58,12 +58,12 @@ jobs:
       - name: Setup environment
         run: |
           cp .env.example .env
-          {{#if (eq database "postgresql")}}
+{{#postgresql}}
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/{{projectName}}_test?schema=public" >> .env
-          {{/if}}
-          {{#if (eq database "mysql")}}
+{{/postgresql}}
+{{#mysql}}
           echo "DATABASE_URL=mysql://root:root@localhost:3306/{{projectName}}_test" >> .env
-          {{/if}}
+{{/mysql}}
           echo "JWT_SECRET=test-jwt-secret" >> .env
 
       - name: Generate Prisma client

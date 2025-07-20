@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs-extra'
 import ora from 'ora'
-import { execa } from 'execa'
+import { promisify } from 'util'
 import { ProjectConfig } from '../types'
 import { 
   copyTemplate, 
@@ -51,7 +51,9 @@ export class ProjectGenerator {
         includeDocker: this.config.includeDocker,
         setupTests: this.config.setupTests,
         setupCI: this.config.setupCI,
-        year: new Date().getFullYear()
+        year: new Date().getFullYear(),
+        postgresql: this.config.database === 'postgresql',
+        mysql: this.config.database === 'mysql'
       }
 
       // Copiar template base
@@ -80,32 +82,30 @@ export class ProjectGenerator {
     const spinner = ora('Instalando dependências...').start()
 
     try {
-      await execa('npm', ['install'], {
-        cwd: this.config.projectPath,
-        stdio: 'pipe'
+      const exec = promisify(require('child_process').exec)
+      
+      await exec('npm install', {
+        cwd: this.config.projectPath
       })
 
       spinner.succeed('Dependências instaladas')
     } catch (error) {
-      spinner.fail('Erro ao instalar dependências')
-      throw error
+      spinner.warn('Erro ao instalar dependências - execute manualmente: npm install')
     }
   }
-
   private async setupDatabase(): Promise<void> {
     const spinner = ora('Configurando banco de dados...').start()
 
     try {
-      // Gerar cliente Prisma
-      await execa('npx', ['prisma', 'generate'], {
-        cwd: this.config.projectPath,
-        stdio: 'pipe'
+      const exec = promisify(require('child_process').exec)
+      
+      await exec('npx prisma generate', {
+        cwd: this.config.projectPath
       })
 
       spinner.succeed('Banco de dados configurado')
     } catch (error) {
-      spinner.fail('Erro ao configurar banco de dados')
-      throw error
+      spinner.warn('Erro ao configurar banco - execute manualmente: npm run db:generate')
     }
   }
 
@@ -115,10 +115,11 @@ export class ProjectGenerator {
     const spinner = ora('Executando setup inicial...').start()
 
     try {
-      // Build do projeto
-      await execa('npm', ['run', 'build'], {
-        cwd: this.config.projectPath,
-        stdio: 'pipe'
+
+      const exec = promisify(require('child_process').exec)
+      
+      await exec('npm run build', {
+        cwd: this.config.projectPath
       })
 
       spinner.succeed('Setup inicial concluído')

@@ -54,11 +54,15 @@ export async function copyTemplate(
   context: Record<string, any>
 ): Promise<void> {
   const stat = await fs.stat(sourcePath)
+  console.log(`DEBUG copyTemplate - source: ${sourcePath}`)
+  console.log(`DEBUG copyTemplate - dest: ${destPath}`)
   
   if (stat.isDirectory()) {
     await ensureDir(destPath)
     const files = await fs.readdir(sourcePath)
-    
+
+    console.log(`DEBUG copyTemplate - directory files: ${files.join(', ')}`)
+
     for (const file of files) {
       await copyTemplate(
         path.join(sourcePath, file),
@@ -67,21 +71,25 @@ export async function copyTemplate(
       )
     }
   } else {
+    console.log(`DEBUG copyTemplate - copying file: ${sourcePath}`)
     const content = await fs.readFile(sourcePath, 'utf8')
     
     if (sourcePath.endsWith('.mustache')) {
+      console.log(`DEBUG copyTemplate - processing mustache: ${sourcePath}`)
       const mustache = require('mustache')
       const processed = mustache.render(content, context)
       const finalDestPath = destPath.replace('.mustache', '')
+      console.log(`DEBUG copyTemplate - writing processed file: ${finalDestPath}`)
       await fs.writeFile(finalDestPath, processed)
     } else {
+      console.log(`DEBUG copyTemplate - copying regular file: ${destPath}`)
       await fs.copy(sourcePath, destPath)
     }
   }
 }
 
 export function getTemplatePath(): string {
-  return path.join(__dirname, '..', '..', 'templates')
+  return path.join(process.cwd(), 'src', 'templates')
 }
 
 export function logStep(step: string, description: string): void {
