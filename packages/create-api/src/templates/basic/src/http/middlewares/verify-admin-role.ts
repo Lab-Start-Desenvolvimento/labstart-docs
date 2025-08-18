@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { makeGetUserProfileService } from '@/services/factories/make-get-user-profile-service'
+import { makeGetUserService } from '@/services/factories/make-user-services'
 
 export async function verifyAdminRole(request: FastifyRequest, reply: FastifyReply) {
-  const getUserProfileService = makeGetUserProfileService()
+  const getUserProfileService = makeGetUserService()
   const userId = parseInt(request.user.sub)
 
   const { user } = await getUserProfileService.execute({ userId })
