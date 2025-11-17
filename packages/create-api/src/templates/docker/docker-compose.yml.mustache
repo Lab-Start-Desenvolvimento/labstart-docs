@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  {{#includeDocker}}
+  {{#postgresql}}
+  postgres:
+    image: postgres:15-alpine
+    container_name: {{projectName}}-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: {{projectName}}_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - {{projectName}}-network
+
+  {{/postgresql}}
+  {{#mysql}}
+  mysql:
+    image: mysql:8.0
+    container_name: {{projectName}}-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: {{projectName}}_dev
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - {{projectName}}-network
+
+  {{/mysql}}
+
+  redis:
+    image: redis:7-alpine
+    container_name: {{projectName}}-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - {{projectName}}-network
+
+  {{/includeDocker}}
+
+volumes:
+  {{#includeDocker}}
+  {{#postgresql}}
+  postgres_data:
+  {{/postgresql}}
+  {{#mysql}}
+  mysql_data:
+  {{/mysql}}
+  redis_data:
+  {{/includeDocker}}
+
+networks:
+  {{#includeDocker}}
+  {{projectName}}-network:
+    driver: bridge
+  {{/includeDocker}}
